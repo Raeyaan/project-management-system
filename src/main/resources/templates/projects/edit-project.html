@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Project</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Edit Project</h1>
+    <form th:action="@{/projects/edit/{id}(id=${project.id})}" th:object="${project}" method="post">
+        <input type="hidden" name="_method" value="put" />
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" th:field="*{description}" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="date" class="form-control" id="startDate" th:field="*{startDate}" required>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="date" class="form-control" id="endDate" th:field="*{endDate}" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <input type="text" class="form-control" id="status" th:field="*{status}" required>
+        </div>
+        <div class="form-group">
+            <label for="client">Client</label>
+            <select class="form-control" id="client" th:field="*{client}" required>
+                <option value="">Select a client</option>
+                <option th:each="client : ${clients}" th:value="${client.id}" th:text="${client.name}" th:selected="${client.id == project.client?.id}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="manager">Project Manager</label>
+            <select class="form-control" id="manager" th:field="*{manager}" required>
+                <option th:each="manager : ${projectManagers}" th:value="${manager.id}" th:text="${manager.name}" th:selected="${manager.id == project.manager.id}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="client">Client</label>
+            <select class="form-control" id="assignedDevelopers" th:field="*{assignedDevelopers}" multiple required>
+                <option value="">Select a client</option>
+                <option th:each="developer : ${assignedDevelopers}" th:value="${developer.id}" th:text="${developer.name}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="/projects" class="btn btn-danger">Back</a>
+    </form>
+</div>
+
+<!-- Add Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
