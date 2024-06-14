@@ -2,6 +2,7 @@ package com.example.projectmanagement.controller.web;
 
 import com.example.projectmanagement.domain.Developer;
 import com.example.projectmanagement.domain.Project;
+import com.example.projectmanagement.domain.ProjectManager;
 import com.example.projectmanagement.service.ClientService;
 import com.example.projectmanagement.service.DeveloperService;
 import com.example.projectmanagement.service.ProjectManagerService;
@@ -68,6 +69,16 @@ public class ProjectController {
             developer.setAssignedProjects(assignedProjects);
             developerService.saveDeveloper(developer);
         });
+        ProjectManager selectedProjectManager = project.getManager();
+        if (selectedProjectManager != null) {
+            Project existingProject = selectedProjectManager.getProject();
+            if (existingProject != null) {
+                existingProject.setManager(null);
+                projectService.saveProject(existingProject);
+            }
+            selectedProjectManager.setProject(project);
+            projectManagerService.saveProjectManager(selectedProjectManager);
+        }
 
         projectService.saveProject(project);
         return "redirect:/projects";
@@ -79,6 +90,16 @@ public class ProjectController {
         if (existingProject == null) {
             // Handle project not found
             return "error";
+        }
+        ProjectManager selectedProjectManager = project.getManager();
+        if (selectedProjectManager != null) {
+            Project oldProject = selectedProjectManager.getProject();
+            if (oldProject != null && !oldProject.getId().equals(id)) {
+                oldProject.setManager(null);
+                projectService.saveProject(oldProject);
+            }
+            selectedProjectManager.setProject(existingProject);
+            projectManagerService.saveProjectManager(selectedProjectManager);
         }
         existingProject.setName(project.getName());
         existingProject.setDescription(project.getDescription());

@@ -3,13 +3,12 @@ package com.example.projectmanagement.domain;
 // ProjectManager.java
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -25,8 +24,9 @@ public class ProjectManager extends Person {
     @Column(name = "experience", nullable = false)
     private String experience;
 
-    @OneToMany(mappedBy = "manager", cascade = CascadeType.ALL)
-    private List<Project> managedProjects;
+    @JsonIgnoreProperties({"assignedDevelopers", "manager", "client", "projectBugs"})
+    @OneToOne(mappedBy = "manager", cascade = CascadeType.ALL)
+    private Project project;
     @Override
     public String toString() {
         return getName();

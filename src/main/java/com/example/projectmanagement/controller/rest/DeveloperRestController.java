@@ -4,11 +4,13 @@ package com.example.projectmanagement.controller.rest;
 
 
 import com.example.projectmanagement.domain.Developer;
+import com.example.projectmanagement.domain.Project;
 import com.example.projectmanagement.service.DeveloperService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,6 +37,7 @@ public class DeveloperRestController {
 
     @PostMapping
     public ResponseEntity<Developer> createDeveloper(@RequestBody Developer developer) {
+        developer.setAssignedProjects(new ArrayList<Project>());
         Developer createdDeveloper = developerService.saveDeveloper(developer);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDeveloper);
     }
@@ -45,6 +48,7 @@ public class DeveloperRestController {
         if (existingDeveloper == null) {
             return ResponseEntity.notFound().build();
         }
+        developer.setAssignedProjects(existingDeveloper.getAssignedProjects());
         developer.setId(id);
         Developer updatedDeveloper = developerService.saveDeveloper(developer);
         return ResponseEntity.ok(updatedDeveloper);

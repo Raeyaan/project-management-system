@@ -42,7 +42,7 @@
         <div class="form-group">
             <label for="manager">Project Manager</label>
             <select class="form-control" id="manager" th:field="*{manager}" required>
-                <option th:each="manager : ${projectManagers}" th:value="${manager.id}" th:text="${manager.name}" th:selected="${manager.id == project.manager.id}"></option>
+                <option th:each="manager : ${projectManagers}" th:value="${manager.id}" th:text="${manager.name}" ></option>
             </select>
         </div>
         <div class="form-group">

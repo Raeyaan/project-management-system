@@ -25,11 +25,8 @@
             <td th:text="${projectManager.name}"></td>
             <td th:text="${projectManager.email}"></td>
             <td th:text="${projectManager.experience}"></td>
-            <td>
-                <ul>
-                    <li th:each="project : ${projectManager.managedProjects}" th:text="${project.name}"></li>
-                </ul>
-            </td>
+            <td th:text="${projectManager.project}"></td>
+
 
             <td>
                 <a th:href="@{/project-managers/edit/{id}(id=${projectManager.id})}" class="btn btn-primary">Edit</a>

@@ -1,6 +1,7 @@
 package com.example.projectmanagement.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,10 +32,13 @@ public class ProjectBug extends AbstractEntity{
 
     @ManyToOne
     @JoinColumn(name = "developer_id")
+    @JsonIgnoreProperties({"assignedProjects", "projectBugs"})
     private Developer assignedDeveloper;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonIgnoreProperties({"assignedDevelopers", "manager", "client", "projectBugs"})
+
     private Project project;
 
 

@@ -29,7 +29,7 @@
             <td th:text="${projectBug.severity}"></td>
             <td th:text="${projectBug.status}"></td>
             <td th:text="${projectBug.assignedDeveloper.name}"></td>
-            <td th:text="${projectBug.project.name}"></td>
+            <td th:text="${projectBug.project?.name}"></td>
             <td>
                 <a th:href="@{/project-bugs/edit/{id}(id=${projectBug.id})}" class="btn btn-primary">Edit</a>
                 <a th:href="@{/project-bugs/delete/{id}(id=${projectBug.id})}" class="btn btn-danger">Delete</a>

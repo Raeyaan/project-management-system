@@ -2,6 +2,7 @@ package com.example.projectmanagement.service;
 
 
 import com.example.projectmanagement.domain.Developer;
+import com.example.projectmanagement.domain.Project;
 import com.example.projectmanagement.repository.DeveloperRepository;
 import org.springframework.stereotype.Service;
 
@@ -31,4 +32,7 @@ public class DeveloperService {
         developerRepository.deleteById(id);
     }
 
+    public List<Developer> getDevelopersByProject(Project project) {
+        return developerRepository.findByAssignedProjectsContaining(project);
+    }
 }

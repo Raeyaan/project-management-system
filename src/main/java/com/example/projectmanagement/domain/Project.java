@@ -1,5 +1,6 @@
 package com.example.projectmanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,17 +40,23 @@ public class Project extends AbstractEntity {
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "developer_id")
     )
+    @JsonIgnoreProperties({"assignedProjects", "projectBugs"})
     private List<Developer> assignedDevelopers;
 
-    @ManyToOne
-    @JoinColumn(name = "manager_id")
+
+    @OneToOne
+    @JoinColumn(name = "manager_id", referencedColumnName = "id")
+    @JsonIgnoreProperties("project")
     private ProjectManager manager;
 
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @JsonIgnoreProperties({"projects"})
+
     private Client client;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"project", "assignedDeveloper"})
     private List<ProjectBug> projectBugs;
 
 

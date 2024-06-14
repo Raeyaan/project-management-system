@@ -2,8 +2,10 @@ package com.example.projectmanagement.controller.rest;
 
 // ProjectManagerRestController.java
 
+import com.example.projectmanagement.domain.Project;
 import com.example.projectmanagement.domain.ProjectManager;
 import com.example.projectmanagement.service.ProjectManagerService;
+import com.example.projectmanagement.service.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,11 @@ import java.util.List;
 @RequestMapping("/api/project-managers")
 public class ProjectManagerRestController {
     private final ProjectManagerService projectManagerService;
+     private final ProjectService projectService;
 
-    public ProjectManagerRestController(ProjectManagerService projectManagerService) {
+    public ProjectManagerRestController(ProjectManagerService projectManagerService, ProjectService projectService) {
         this.projectManagerService = projectManagerService;
+        this.projectService = projectService;
     }
 
     @GetMapping
@@ -34,6 +38,7 @@ public class ProjectManagerRestController {
 
     @PostMapping
     public ResponseEntity<ProjectManager> createProjectManager(@RequestBody ProjectManager projectManager) {
+        projectManager.setProject(new Project());
         ProjectManager createdProjectManager = projectManagerService.saveProjectManager(projectManager);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProjectManager);
     }
@@ -44,6 +49,7 @@ public class ProjectManagerRestController {
         if (existingProjectManager == null) {
             return ResponseEntity.notFound().build();
         }
+        projectManager.setProject(existingProjectManager.getProject());
         projectManager.setId(id);
         ProjectManager updatedProjectManager = projectManagerService.saveProjectManager(projectManager);
         return ResponseEntity.ok(updatedProjectManager);

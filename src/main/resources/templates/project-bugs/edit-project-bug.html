@@ -29,15 +29,16 @@
             <input type="text" class="form-control" id="status" th:field="*{status}" required>
         </div>
         <div class="form-group">
-            <label for="assignedDeveloper">Assigned Developer</label>
-            <select class="form-control" id="assignedDeveloper" th:field="*{assignedDeveloper}" required>
-                <option th:each="developer : ${developers}" th:value="${developer.id}" th:text="${developer.name}" th:selected="${developer.id == projectBug.assignedDeveloper.id}"></option>
+            <label for="project">Project</label>
+            <select class="form-control" id="project" th:field="*{project}" onchange="updateDeveloperOptions(this.value)">
+                <option value="">Select a project</option>
+                <option th:each="project : ${projects}" th:value="${project.id}" th:text="${project.name}"></option>
             </select>
         </div>
         <div class="form-group">
-            <label for="project">Project</label>
-            <select class="form-control" id="project" th:field="*{project}" required>
-                <option th:each="project : ${projects}" th:value="${project.id}" th:text="${project.name}" th:selected="${project.id == projectBug.project.id}"></option>
+            <label for="assignedDeveloper">Assigned Developer</label>
+            <select class="form-control" id="assignedDeveloper" th:field="*{assignedDeveloper}" disabled>
+                <option value="">Select a developer</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
@@ -48,5 +49,28 @@
 
 <!-- Add Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function updateDeveloperOptions(projectId) {
+        let developerSelect = document.getElementById('assignedDeveloper');
+        developerSelect.disabled = !projectId;
+        developerSelect.innerHTML = '<option value="">Select a developer</option>';
+
+        if (projectId) {
+            fetch('/api/projects/' + projectId + '/developers')
+                .then(response => response.json())
+                .then(developers => {
+                    developers.forEach(developer => {
+                        let option = document.createElement('option');
+                        option.value = developer.id;
+                        option.textContent = developer.name;
+                        developerSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching developers:', error);
+                });
+        }
+    }
+</script>
 </body>
 </html>

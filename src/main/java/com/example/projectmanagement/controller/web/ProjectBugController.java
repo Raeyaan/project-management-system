@@ -3,6 +3,7 @@ package com.example.projectmanagement.controller.web;
 // ProjectBugController.java
 
 
+import com.example.projectmanagement.domain.Project;
 import com.example.projectmanagement.domain.ProjectBug;
 import com.example.projectmanagement.service.DeveloperService;
 import com.example.projectmanagement.service.ProjectBugService;
@@ -32,9 +33,14 @@ public class ProjectBugController {
     }
 
     @GetMapping("/add")
-    public String showAddProjectBugForm(Model model) {
+    public String showAddProjectBugForm(Model model, @RequestParam(required = false) Long projectId) {
         model.addAttribute("projectBug", new ProjectBug());
-        model.addAttribute("developers", developerService.getAllDevelopers());
+        if (projectId != null) {
+            Project project = projectService.getProjectById(projectId);
+            if (project != null) {
+                model.addAttribute("developers", developerService.getDevelopersByProject(project));
+            }
+        }
         model.addAttribute("projects", projectService.getAllProjects());
         return "project-bugs/add-project-bug";
     }
@@ -70,7 +76,6 @@ public class ProjectBugController {
         existingProjectBug.setStatus(projectBug.getStatus());
         existingProjectBug.setProject(projectBug.getProject());
         existingProjectBug.setAssignedDeveloper(projectBug.getAssignedDeveloper());
-        // Update other properties as needed
         projectBugService.saveProjectBug(existingProjectBug);
         return "redirect:/project-bugs";
     }

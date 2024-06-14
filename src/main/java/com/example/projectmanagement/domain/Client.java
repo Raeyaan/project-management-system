@@ -3,6 +3,7 @@ package com.example.projectmanagement.domain;
 // Client.java
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,6 +28,7 @@ public class Client extends Person{
 
     private String contactNumber;
 
+    @JsonIgnoreProperties({"client", "assignedDevelopers", "manager","projectBugs"})
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Project> projects;
 

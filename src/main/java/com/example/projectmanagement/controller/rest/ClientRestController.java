@@ -4,11 +4,13 @@ package com.example.projectmanagement.controller.rest;
 
 
 import com.example.projectmanagement.domain.Client;
+import com.example.projectmanagement.domain.Project;
 import com.example.projectmanagement.service.ClientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,6 +29,7 @@ public class ClientRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Client> getClientById(@PathVariable Long id) {
+
         Client client = clientService.getClientById(id);
         return client != null
                 ? ResponseEntity.ok(client)
@@ -35,6 +38,7 @@ public class ClientRestController {
 
     @PostMapping
     public ResponseEntity<Client> createClient(@RequestBody Client client) {
+        client.setProjects(new ArrayList<Project>());
         Client createdClient = clientService.saveClient(client);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdClient);
     }
@@ -45,6 +49,7 @@ public class ClientRestController {
         if (existingClient == null) {
             return ResponseEntity.notFound().build();
         }
+        client.setProjects(existingClient.getProjects());
         client.setId(id);
         Client updatedClient = clientService.saveClient(client);
         return ResponseEntity.ok(updatedClient);

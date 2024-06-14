@@ -1,5 +1,6 @@
 package com.example.projectmanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
@@ -21,6 +22,7 @@ public class Developer extends Person{
     @Column(name = "skill-set",  nullable = false)
     private String skillSet;
 
+    @JsonIgnoreProperties({"assignedDevelopers", "manager", "client", "projectBugs"})
     @ManyToMany(mappedBy = "assignedDevelopers")
     private List<Project> assignedProjects;
 
